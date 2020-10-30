@@ -115,9 +115,10 @@ hM list
       | otherwise = hamming list
 
 hamming :: [String] -> Hammingabstand
---hamming list = minimum (scanl (\acc x -> minimum (map (h x) list) ) 10000 list)
-hamming [] = 100000
-hamming (s:list) = minimum ( map (h s) list )
+--hamming list = minimum (scanl (\acc x -> minimum (map (h x) list) ) 10000 list 
+hamming (s:list)
+         | null list = 100000
+         | otherwise = minimum (minimum ( map (h s) list ) : [hamming list])
 
 
 equalLen :: [String] -> Bool
