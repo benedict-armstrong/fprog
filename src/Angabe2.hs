@@ -96,9 +96,6 @@ liefere_woerter_in = lwi
 
 lwi :: String -> Wortliste
 lwi [] = [""]
--- lwi (c:string)
---    | c == ' ' || c == '\n' || c == '\t' = lwi string
---    | otherwise = (c : head (lwi string)) : tail (lwi string)
 
 {- lwi geht folgendermassen vor: ... 
 -}
