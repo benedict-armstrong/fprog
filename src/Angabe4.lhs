@@ -86,7 +86,11 @@ data TBaum'   = TB' Weg
                 | TK' Weg TBaum' TBaum' TBaum' deriving (Eq,Show)
 
 awi :: TBaum -> TBaum'
-awi t = TB' [R]
+awi t = 
+    let awi' :: TBaum -> Weg -> TBaum'
+        awi' (TB) w = TB' w
+        awi' (TK l m r) w = TK' w (awi' l (w++[L])) (awi' m (w++[M])) (awi' r (w++[R]))
+    in awi' t []
 
 \end{code}
 
@@ -95,20 +99,42 @@ awi geht folgendermassen vor: ...
 
 Aufgabe A.4
 
+\begin{code}
+
 type Info a = [a]
 data Baum a = B (Info a)
               | K (Baum a) (Info a) (Baum a)
 
 instance Show a => Show (Baum a) where
+    show (B xs) = "<" ++ show xs ++ ">"
+    show (K b1 xs b2) = "<Wurzel " ++ show xs ++ " " ++ show b1 ++ " " ++ show b2 ++ ">"
 
 instance Eq a => Eq (Baum a) where
+    (B _) == (K _ _ _) = False
+    (K _ _ _) == (B _) = False
+    (B c1) == (B c2) = c1 == c2
+    (K b1 c1 b2) == (K b3 c2 b4) = (c1 == c2) && (b1 == b3) && (b2 == b4)
 
 instance Ord a => Ord (Baum a) where
+    (B c1) < (K _ c2 _) = c1 `smallerThan` c2
+    (K b1 c1 b2) < (K b3 c2 b4) = c1 `smallerThan` c2 && b1 < b3 && b2 < b4
+    b1 <= b2 = b1 < b2 || b1 == b2
+
+
+smallerThan :: Ord a => [a] -> [a] -> Bool
+smallerThan _ [] = False
+smallerThan [] _ = True
+smallerThan (x:xs) (y:ys) = x < y && (xs `smallerThan` ys)
+
+
+\end{code}
 
 Die Instanzdeklarationen gehen folgendermassen vor: ...
 
 
 Aufgabe A.5
+
+\begin{code}
 
 type UntereSchranke = Int
 type ObereSchranke  = Int
@@ -117,4 +143,7 @@ data Intervall      = IV (UntereSchranke,ObereSchranke)
                       | Ungueltig
 
 instance Show Intervall where
+    
+
+\end{code}
 
