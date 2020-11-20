@@ -143,6 +143,12 @@ data Intervall      = IV (UntereSchranke,ObereSchranke)
                       | Ungueltig
 
 instance Show Intervall where
+    show Leer = "<>"
+    show Ungueltig = "Kein Intervall"
+    show (IV (a, b))
+            | a < b = "<" ++ show a ++ "," ++ show b ++ ">"
+            | otherwise = show Leer
+
     
 
 \end{code}
